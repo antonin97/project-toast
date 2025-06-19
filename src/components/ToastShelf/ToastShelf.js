@@ -1,28 +1,27 @@
 import React from 'react';
 
 import Toast from '../Toast';
+import { ToastContext } from '../ToastProvider';
+
 import styles from './ToastShelf.module.css';
 
-function ToastShelf({ toastList, setToastList }) {
-
-  console.log("SHELF RENDERED")
+function ToastShelf() {
+  const { shownToasts } = React.useContext(ToastContext);
 
   return (
-    <ol className={styles.wrapper}>
-      {toastList.map((toast) => {
+    <ol
+      className={styles.wrapper}
+      role="region"
+      aria-live="polite"
+      aria-label="Notification"
+    >
+      {shownToasts.map((toast) => {
         return (
           <li key={toast.id} className={styles[toast.variant]}>
             <div className={styles.toastWrapper}>
-            <Toast
-              variant={toast.variant}
-              handleDismiss={() => {
-                setToastList((currentToasts) =>
-                  currentToasts.filter((currentToast) => currentToast.id !== toast.id)
-                );
-              }}
-            >
-              {toast.children}
-            </Toast>
+              <Toast variant={toast.variant} id={toast.id}>
+                {toast.children}
+              </Toast>
             </div>
           </li>
         );
